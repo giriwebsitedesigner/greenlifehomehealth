@@ -7,7 +7,24 @@
   var qs = function (s, r) { return (r || document).querySelector(s); };
   var qsa = function (s, r) { return Array.from((r || document).querySelectorAll(s)); };
 
-  var pageSlug = (window.location.pathname || "/")
+  var scriptSrc = document.currentScript && document.currentScript.src;
+  var assetRoot = scriptSrc ? new URL("../", scriptSrc) : new URL("assets/", window.location.href);
+  var siteRoot = new URL("../", assetRoot);
+
+  function assetUrl(path) {
+    return new URL(path, assetRoot).href;
+  }
+
+  function sitePathname() {
+    var basePath = siteRoot.pathname || "/";
+    var current = window.location.pathname || "/";
+    if (basePath !== "/" && current.indexOf(basePath) === 0) {
+      current = current.slice(basePath.length);
+    }
+    return "/" + current.replace(/^\/+/, "");
+  }
+
+  var pageSlug = sitePathname()
     .replace(/\/index\.html$/i, "/")
     .split("/")
     .filter(Boolean)[0] || "home";
@@ -68,21 +85,10 @@
 
   ensureQuickActions();
 
-  var scriptSrc = document.currentScript && document.currentScript.src;
-  var assetRoot = scriptSrc ? new URL("../", scriptSrc) : new URL("assets/", window.location.href);
-  function assetUrl(path) {
-    return new URL(path, assetRoot).href;
-  }
-
-  var siteRoot = new URL("../", assetRoot);
-  var currentDepth = (window.location.pathname || "/")
-    .replace(/\/index\.html$/i, "/")
-    .split("/")
-    .filter(Boolean).length;
-
   function routePath(path) {
     path = String(path || "").replace(/^\/+/, "");
-    return currentDepth ? "../".repeat(currentDepth) + path : "/" + path;
+    var target = new URL(path, siteRoot);
+    return target.pathname + target.search + target.hash;
   }
 
   function normalizeFolderRoute(path) {
