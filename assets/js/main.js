@@ -75,20 +75,52 @@
   }
 
   var siteRoot = new URL("../", assetRoot);
-  function siteUrl(path) {
-    // For Netlify: always return root-relative paths
-    if (!path.startsWith("/")) {
-      path = "/" + path;
+  var currentDepth = (window.location.pathname || "/")
+    .replace(/\/index\.html$/i, "/")
+    .split("/")
+    .filter(Boolean).length;
+
+  function routePath(path) {
+    path = String(path || "").replace(/^\/+/, "");
+    return currentDepth ? "../".repeat(currentDepth) + path : "/" + path;
+  }
+
+  function normalizeFolderRoute(path) {
+    var hash = "";
+    var query = "";
+    var hashIndex = path.indexOf("#");
+    if (hashIndex > -1) {
+      hash = path.slice(hashIndex);
+      path = path.slice(0, hashIndex);
     }
-    return path;
+    var queryIndex = path.indexOf("?");
+    if (queryIndex > -1) {
+      query = path.slice(queryIndex);
+      path = path.slice(0, queryIndex);
+    }
+    path = path
+      .replace(/^\/+/, "")
+      .replace(/\/index\.html$/i, "/")
+      .replace(/^about\/about\.html$/i, "about/")
+      .replace(/^services\/services\.html$/i, "services/")
+      .replace(/^appointment\/appointment\.html$/i, "appointment/")
+      .replace(/^testimonials\/testimonials\.html$/i, "testimonials/")
+      .replace(/^contact\/contact\.html$/i, "contact/")
+      .replace(/^gallery\/gallery\.html$/i, "gallery/")
+      .replace(/^services\/([^/]+)\.html$/i, "services/$1/");
+    if (path && !path.endsWith("/")) path += "/";
+    return path + query + hash;
+  }
+
+  function siteUrl(path) {
+    return routePath(normalizeFolderRoute(path));
   }
 
   function normalizeSiteLinks() {
     qsa('a[href^="/"]').forEach(function (link) {
       var href = link.getAttribute("href") || "";
       if (!/^\/(about|appointment|contact|gallery|services|testimonials)(\/|$)/i.test(href)) return;
-      // Keep root-relative paths as-is for Netlify compatibility
-      link.setAttribute("href", href);
+      link.setAttribute("href", routePath(normalizeFolderRoute(href)));
     });
   }
 
@@ -96,15 +128,15 @@
 
   function ensureServicesMenu() {
     var items = [
-      ["All Services", "/services/services.html"],
-      ["Nursing Care at Home", "/services/nursing-care.html"],
-      ["Physiotherapy at Home", "/services/physiotherapy.html"],
-      ["Post Operative Care", "/services/post-operative-care.html"],
-      ["Geriatric Care", "/services/elder-care.html"],
-      ["Palliative Care", "/services/palliative-care.html"],
-      ["Doctor's Visit at Home", "/services/doctor-visit.html"],
-      ["Pediatric Care", "/services/pediatric-care.html"],
-      ["Professional Care Giver / Care Taker", "/services/professional-caregiver.html"]
+      ["All Services", "services/"],
+      ["Nursing Care at Home", "services/nursing-care/"],
+      ["Physiotherapy at Home", "services/physiotherapy/"],
+      ["Post Operative Care", "services/post-operative-care/"],
+      ["Geriatric Care", "services/elder-care/"],
+      ["Palliative Care", "services/palliative-care/"],
+      ["Doctor's Visit at Home", "services/doctor-visit/"],
+      ["Pediatric Care", "services/pediatric-care/"],
+      ["Professional Care Giver / Care Taker", "services/professional-caregiver/"]
     ];
 
     qsa(".nav-links").forEach(function (nav) {
@@ -120,7 +152,7 @@
       var menu = document.createElement("div");
       menu.className = "nav-service-menu";
       menu.innerHTML =
-        '<a class="' + serviceLink.className + ' nav-service-trigger" href="' + serviceLink.href + '" aria-haspopup="true" aria-expanded="false">' +
+        '<a class="' + serviceLink.className + ' nav-service-trigger" href="' + (serviceLink.getAttribute("href") || routePath("services/")) + '" aria-haspopup="true" aria-expanded="false">' +
           '<span>Services</span>' +
         '</a>' +
         '<button class="nav-service-toggle" type="button" aria-label="Show services" aria-expanded="false">' +
@@ -128,7 +160,7 @@
         '</button>' +
         '<div class="nav-service-dropdown" role="menu" aria-label="Services">' +
           items.map(function (item) {
-            return '<a role="menuitem" href="' + item[1] + '">' + item[0] + '</a>';
+            return '<a role="menuitem" href="' + routePath(item[1]) + '">' + item[0] + '</a>';
           }).join("") +
         '</div>';
 
@@ -164,20 +196,8 @@
         });
       }
       if (trigger) {
-        trigger.addEventListener("click", function (e) {
-          var nav = qs(".nav-links");
-          var mobileMenuOpen = nav && nav.classList.contains("open");
-          if (!mobileMenuOpen) {
-            closeMenu();
-            return;
-          }
-
-          e.preventDefault();
-          if (menu.classList.contains("is-open")) {
-            closeMenu();
-          } else {
-            openMenu();
-          }
+        trigger.addEventListener("click", function () {
+          closeMenu();
         });
       }
       qsa(".nav-service-dropdown a", menu).forEach(function (link) {
@@ -331,7 +351,7 @@
       if (appointment) {
         appointment.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
-        window.location.href = siteUrl("appointment/appointment.html?service=" + encodeURIComponent(card.dataset.service || ""));
+        window.location.href = siteUrl("appointment/?service=" + encodeURIComponent(card.dataset.service || ""));
       }
     });
   });
