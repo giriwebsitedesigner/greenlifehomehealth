@@ -11710,3 +11710,53 @@ html.gl-desktop-request .gallery-shot {
   background: #ffffff !important;
 }
 
+/* Final floating action icons: match supplied WhatsApp and phone artwork. */
+.gl-ios-actions {
+  right: 20px !important;
+  bottom: 24px !important;
+  gap: 10px !important;
+}
+
+.gl-ios-actions a,
+.gl-ios-actions .wa,
+.gl-ios-actions .phone {
+  width: 64px !important;
+  height: 64px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18) !important;
+  overflow: hidden !important;
+}
+
+.gl-ios-actions .wa {
+  border-radius: 14px !important;
+}
+
+.gl-ios-actions .phone {
+  border-radius: 50% !important;
+}
+
+.gl-ios-actions img,
+.gl-ios-actions svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 760px) {
+  .gl-ios-actions {
+    right: 14px !important;
+    bottom: 86px !important;
+    gap: 9px !important;
+  }
+
+  .gl-ios-actions a,
+  .gl-ios-actions .wa,
+  .gl-ios-actions .phone {
+    width: 56px !important;
+    height: 56px !important;
+  }
+}
+
