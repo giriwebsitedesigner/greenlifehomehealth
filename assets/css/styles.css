@@ -11916,7 +11916,36 @@ html.gl-desktop-request .page-about .gl-founder-section {
 }
 
 html.gl-desktop-request .gl-ios-actions {
-  right: 18px !important;
-  bottom: 18px !important;
+  right: max(18px, env(safe-area-inset-right)) !important;
+  bottom: max(18px, env(safe-area-inset-bottom)) !important;
+}
+
+html.gl-desktop-request .gl-ios-actions a,
+html.gl-desktop-request .gl-ios-actions .wa,
+html.gl-desktop-request .gl-ios-actions .phone {
+  width: 58px !important;
+  height: 58px !important;
+  min-width: 58px !important;
+  min-height: 58px !important;
+  border-radius: 14px !important;
+  transform: none !important;
+  animation: none !important;
+  -webkit-transform: none !important;
+  -webkit-animation: none !important;
+}
+
+html.gl-desktop-request .gl-ios-actions .phone {
+  border-radius: 50% !important;
+}
+
+html.gl-desktop-request .gl-ios-actions img,
+html.gl-desktop-request .gl-ios-actions svg {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  transform: none !important;
+  animation: none !important;
+  -webkit-transform: none !important;
+  -webkit-animation: none !important;
 }
 
