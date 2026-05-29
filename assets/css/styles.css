@@ -11780,10 +11780,10 @@ html.gl-desktop-request .gl-ios-actions {
 html.gl-desktop-request .gl-ios-actions a,
 html.gl-desktop-request .gl-ios-actions .wa,
 html.gl-desktop-request .gl-ios-actions .phone {
-  width: 48px !important;
-  height: 48px !important;
-  min-width: 48px !important;
-  min-height: 48px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
   padding: 0 !important;
   border: 0 !important;
   border-radius: 12px !important;
@@ -11892,10 +11892,10 @@ html.gl-desktop-request .page-about .gl-founder-section {
   .gl-ios-actions a,
   .gl-ios-actions .wa,
   .gl-ios-actions .phone {
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
-    min-height: 42px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
   }
 
   .page-about .gl-founder-card {
