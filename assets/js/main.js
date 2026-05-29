@@ -31,6 +31,48 @@
   document.body.classList.add("page-" + pageSlug);
   document.body.dataset.motionPage = pageSlug;
 
+  function syncDesktopRequestMode() {
+    var coarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    var touchPoints = navigator.maxTouchPoints || 0;
+    var smallestScreenSide = Math.min(window.screen.width || window.innerWidth, window.screen.height || window.innerHeight);
+    var likelyPhoneScreen = smallestScreenSide <= 700 || (/Android|iPhone|Mobile/i).test(navigator.userAgent || "");
+    var desktopViewport = window.innerWidth >= 900;
+    document.documentElement.classList.toggle("gl-desktop-request", !!((coarsePointer || touchPoints > 0) && likelyPhoneScreen && desktopViewport));
+  }
+
+  syncDesktopRequestMode();
+  window.addEventListener("resize", syncDesktopRequestMode);
+
+  function initBrandLoader() {
+    var loader = document.createElement("div");
+    loader.className = "gl-loader";
+    loader.setAttribute("role", "status");
+    loader.setAttribute("aria-label", "Loading Green Life Home Health Care");
+    loader.innerHTML =
+      '<div class="gl-loader-card">' +
+        '<div class="gl-loader-mark">' +
+          '<img src="' + assetUrl("icons/green-life-logo.png?v=1") + '" alt="">' +
+        '</div>' +
+        '<div class="gl-loader-title">Green Life</div>' +
+        '<div class="gl-loader-subtitle">Home Health Care</div>' +
+        '<div class="gl-loader-line"><span></span></div>' +
+      '</div>';
+    document.body.classList.add("gl-loading");
+    document.body.prepend(loader);
+
+    window.setTimeout(function () {
+      loader.classList.add("is-leaving");
+      document.body.classList.remove("gl-loading");
+      window.setTimeout(function () {
+        if (loader.parentNode) loader.parentNode.removeChild(loader);
+      }, 650);
+    }, 1250);
+  }
+
+  if (pageSlug === "home") {
+    initBrandLoader();
+  }
+
   function toast(msg) {
     var t = qs("#toast");
     if (!t) return;

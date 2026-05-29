@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responsive Localhost Checker | Green Life</title>
+<style>
+  :root {
+    --green: #0d8f43;
+    --green-dark: #075b2b;
+    --green-soft: #e9f8ef;
+    --ink: #102418;
+    --muted: #567064;
+    --line: #bfebcf;
+    --panel: #ffffff;
+    --page: #f4fbf7;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--page);
+    overflow-x: hidden;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: grid;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 10px 30px rgba(7, 91, 43, 0.08);
+  }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.2;
+    color: var(--green-dark);
+  }
+
+  .current {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: minmax(180px, 260px) 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+
+  select,
+  button {
+    min-height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--green-dark);
+    font: inherit;
+    font-weight: 800;
+  }
+
+  select {
+    width: 100%;
+    padding: 0 12px;
+  }
+
+  .device-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  button {
+    padding: 0 12px;
+    cursor: pointer;
+  }
+
+  button.active {
+    color: #fff;
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .stage-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 128px);
+    padding: 22px;
+    overflow-x: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .stage {
+    width: var(--device-width);
+    min-width: var(--device-width);
+    flex: 0 0 var(--device-width);
+    height: var(--device-height);
+    margin: 0 auto;
+    border: 12px solid #16251c;
+    border-radius: var(--device-radius);
+    background: #fff;
+    box-shadow: 0 24px 70px rgba(13, 90, 45, 0.2);
+    overflow: hidden;
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #fff;
+  }
+
+  @media (max-width: 780px) {
+    .brand-row,
+    .controls {
+      grid-template-columns: 1fr;
+      display: grid;
+    }
+
+    .stage-wrap {
+      padding: 14px;
+      justify-content: flex-start;
+    }
+
+    .stage {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand-row">
+    <div>
+      <h1>Green Life Responsive Localhost Checker</h1>
+      <p class="current" id="currentDevice">iPhone 14 Pro - 390 x 844</p>
+    </div>
+    <p class="current" id="currentPage">Page: Appointment</p>
+  </div>
+
+  <div class="controls">
+    <select id="pageSelect" aria-label="Select page">
+      <option value="../appointment/">Appointment</option>
+      <option value="../">Home</option>
+      <option value="../about/">About</option>
+      <option value="../services/">Services</option>
+      <option value="../contact/">Contact</option>
+      <option value="../testimonials/">Testimonials</option>
+      <option value="../gallery/">Gallery</option>
+      <option value="../services/nursing-care/">Nursing Care</option>
+      <option value="../services/physiotherapy/">Physiotherapy</option>
+      <option value="../services/doctor-visit/">Doctor Visit</option>
+      <option value="../services/professional-caregiver/">Professional Caregiver</option>
+    </select>
+    <div class="device-list" id="deviceList" aria-label="Select responsive device"></div>
+  </div>
+</header>
+
+<main class="stage-wrap">
+  <div class="stage" id="stage" style="--device-width:390px;--device-height:844px;--device-radius:34px;">
+    <iframe id="preview" title="Responsive site preview" src="../appointment/"></iframe>
+  </div>
+</main>
+
+<script>
+  const devices = [
+    ["iPhone SE", 375, 667, 28],
+    ["iPhone 14 Pro", 390, 844, 34],
+    ["iPhone 14 Pro Max", 430, 932, 36],
+    ["Pixel 7", 412, 915, 34],
+    ["Samsung Galaxy S20", 360, 800, 34],
+    ["Samsung Galaxy S23 Ultra", 412, 915, 36],
+    ["iPad Mini", 768, 1024, 28],
+    ["iPad Air", 820, 1180, 28],
+    ["iPad Landscape", 1024, 768, 24],
+    ["Laptop 1366", 1366, 768, 14],
+    ["Desktop 1440", 1440, 900, 10],
+    ["Desktop Full HD", 1920, 1080, 8]
+  ];
+
+  const stage = document.getElementById("stage");
+  const preview = document.getElementById("preview");
+  const pageSelect = document.getElementById("pageSelect");
+  const deviceList = document.getElementById("deviceList");
+  const currentDevice = document.getElementById("currentDevice");
+  const currentPage = document.getElementById("currentPage");
+
+  function setDevice(device, button) {
+    const [name, width, height, radius] = device;
+    stage.style.setProperty("--device-width", width + "px");
+    stage.style.setProperty("--device-height", height + "px");
+    stage.style.setProperty("--device-radius", radius + "px");
+    currentDevice.textContent = name + " - " + width + " x " + height;
+    document.querySelectorAll("[data-device]").forEach((item) => item.classList.remove("active"));
+    button.classList.add("active");
+  }
+
+  devices.forEach((device, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.device = device[0];
+    button.textContent = device[0];
+    button.addEventListener("click", () => setDevice(device, button));
+    deviceList.appendChild(button);
+    if (index === 1) setDevice(device, button);
+  });
+
+  pageSelect.addEventListener("change", () => {
+    preview.src = pageSelect.value;
+    currentPage.textContent = "Page: " + pageSelect.options[pageSelect.selectedIndex].text;
+  });
+</script>
+</body>
+</html>
