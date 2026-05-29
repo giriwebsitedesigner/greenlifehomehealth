@@ -11720,12 +11720,12 @@ html.gl-desktop-request .gallery-shot {
 .gl-ios-actions a,
 .gl-ios-actions .wa,
 .gl-ios-actions .phone {
-  width: 64px !important;
-  height: 64px !important;
+  width: 72px !important;
+  height: 72px !important;
   padding: 0 !important;
   border: 0 !important;
   background: transparent !important;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18) !important;
+  box-shadow: none !important;
   overflow: hidden !important;
 }
 
@@ -11755,8 +11755,8 @@ html.gl-desktop-request .gallery-shot {
   .gl-ios-actions a,
   .gl-ios-actions .wa,
   .gl-ios-actions .phone {
-    width: 56px !important;
-    height: 56px !important;
+    width: 64px !important;
+    height: 64px !important;
   }
 }
 

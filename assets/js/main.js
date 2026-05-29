@@ -126,10 +126,10 @@
     wrap.setAttribute("aria-label", "Quick contact actions");
     wrap.innerHTML =
       '<a class="wa" href="https://wa.me/' + PHONE + '" aria-label="WhatsApp Now">' +
-        '<img src="' + assetUrl("icons/float-whatsapp.svg?v=3") + '" alt="">' +
+        '<img src="' + assetUrl("icons/float-whatsapp.png?v=1") + '" alt="">' +
       '</a>' +
       '<a class="phone" href="tel:+916383915367" aria-label="Call Now">' +
-        '<img src="' + assetUrl("icons/float-phone.svg?v=3") + '" alt="">' +
+        '<img src="' + assetUrl("icons/float-phone.png?v=1") + '" alt="">' +
       '</a>';
   }
 
