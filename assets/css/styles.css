@@ -11196,8 +11196,7 @@ html.gl-desktop-request .navbar .nav-ctas {
 
 html.gl-desktop-request .gl-nav .hamb,
 html.gl-desktop-request .navbar .hamb,
-html.gl-desktop-request .mobile-bottom-bar,
-html.gl-desktop-request .gl-ios-actions {
+html.gl-desktop-request .mobile-bottom-bar {
   display: none !important;
 }
 
@@ -11758,5 +11757,166 @@ html.gl-desktop-request .gallery-shot {
     width: 64px !important;
     height: 64px !important;
   }
+}
+
+/* Final responsive correction: compact steady contact icons and full founder image. */
+.gl-ios-actions,
+html.gl-desktop-request .gl-ios-actions {
+  position: fixed !important;
+  right: clamp(10px, 1.4vw, 18px) !important;
+  bottom: clamp(16px, 2.4vw, 24px) !important;
+  z-index: 99999 !important;
+  display: grid !important;
+  gap: 8px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+.gl-ios-actions a,
+.gl-ios-actions .wa,
+.gl-ios-actions .phone,
+html.gl-desktop-request .gl-ios-actions a,
+html.gl-desktop-request .gl-ios-actions .wa,
+html.gl-desktop-request .gl-ios-actions .phone {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14) !important;
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  overflow: hidden !important;
+}
+
+.gl-ios-actions .phone,
+html.gl-desktop-request .gl-ios-actions .phone {
+  border-radius: 50% !important;
+}
+
+.gl-ios-actions a:hover,
+.gl-ios-actions .wa:hover,
+.gl-ios-actions .phone:hover,
+html.gl-desktop-request .gl-ios-actions a:hover {
+  animation: none !important;
+  transform: none !important;
+}
+
+.gl-ios-actions img,
+.gl-ios-actions svg,
+html.gl-desktop-request .gl-ios-actions img,
+html.gl-desktop-request .gl-ios-actions svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+.gl-kicker:before,
+.gl-icon,
+.gl-flow span,
+.float-actions a,
+.float-actions svg,
+.float-actions img {
+  animation: none !important;
+}
+
+.gl-icon,
+.page-service-detail .gl-icon,
+.page-service-detail .gl-flow span {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  border-radius: 10px !important;
+  font-size: 0.86rem !important;
+  transform: none !important;
+}
+
+.page-about .gl-founder-card,
+html.gl-desktop-request .page-about .gl-founder-card {
+  grid-template-columns: minmax(300px, 420px) minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: clamp(24px, 3.4vw, 50px) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: clamp(22px, 3vw, 36px) !important;
+  overflow: visible !important;
+}
+
+.page-about .gl-founder-card > img,
+html.gl-desktop-request .page-about .gl-founder-card > img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  object-position: center top !important;
+  background: #ffffff !important;
+}
+
+.page-about .gl-founder-card h2,
+html.gl-desktop-request .page-about .gl-founder-card h2 {
+  max-width: 850px !important;
+  font-size: clamp(2.55rem, 4.9vw, 4.15rem) !important;
+  line-height: 1.02 !important;
+  overflow-wrap: break-word !important;
+}
+
+.page-about .gl-founder-card p,
+html.gl-desktop-request .page-about .gl-founder-card p {
+  max-width: 850px !important;
+  overflow-wrap: break-word !important;
+}
+
+html.gl-desktop-request .page-about .gl-founder-section {
+  width: min(1240px, calc(100% - 48px)) !important;
+  max-width: 1240px !important;
+}
+
+@media (max-width: 760px) {
+  .gl-ios-actions {
+    right: 10px !important;
+    bottom: 78px !important;
+    gap: 7px !important;
+  }
+
+  .gl-ios-actions a,
+  .gl-ios-actions .wa,
+  .gl-ios-actions .phone {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+  }
+
+  .page-about .gl-founder-card {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    padding: 16px !important;
+  }
+
+  .page-about .gl-founder-card > img {
+    width: 100% !important;
+    max-height: none !important;
+    object-fit: contain !important;
+  }
+
+  .page-about .gl-founder-card h2 {
+    font-size: clamp(1.9rem, 9.5vw, 2.6rem) !important;
+  }
+}
+
+html.gl-desktop-request .gl-ios-actions {
+  right: 18px !important;
+  bottom: 18px !important;
 }
 
