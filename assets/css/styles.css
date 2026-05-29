@@ -11780,10 +11780,10 @@ html.gl-desktop-request .gl-ios-actions {
 html.gl-desktop-request .gl-ios-actions a,
 html.gl-desktop-request .gl-ios-actions .wa,
 html.gl-desktop-request .gl-ios-actions .phone {
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px !important;
-  min-height: 40px !important;
+  width: 54px !important;
+  height: 54px !important;
+  min-width: 54px !important;
+  min-height: 54px !important;
   padding: 0 !important;
   border: 0 !important;
   border-radius: 12px !important;
@@ -11963,8 +11963,6 @@ html.gl-desktop-request .gl-ios-actions svg {
 .gl-footer .gl-footer-location:focus-visible {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
-  text-decoration-line: underline !important;
-  text-decoration-thickness: 2px !important;
-  text-underline-offset: 5px !important;
+  text-decoration: none !important;
 }
 
