@@ -11673,3 +11673,40 @@ html.gl-desktop-request .form-grid .full {
   }
 }
 
+/* Desktop-site mode on mobile browsers: keep the real desktop layout and image fill. */
+html.gl-desktop-request .page-about .gl-founder-portrait,
+html.gl-desktop-request .page-about .gl-founder-card {
+  background: #ffffff !important;
+  overflow: hidden !important;
+}
+
+html.gl-desktop-request .page-about .gl-founder-portrait img,
+html.gl-desktop-request .page-about .gl-founder-card > img,
+html.gl-desktop-request .gl-rounded-img,
+html.gl-desktop-request .gl-about-nursing-img,
+html.gl-desktop-request .gl-service-media img,
+html.gl-desktop-request .gl-service-detail img,
+html.gl-desktop-request .gl-service-card img,
+html.gl-desktop-request .gallery-shot img,
+html.gl-desktop-request .review-person img {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  background: transparent !important;
+}
+
+html.gl-desktop-request .page-about .gl-founder-portrait img,
+html.gl-desktop-request .page-about .gl-founder-card > img {
+  height: 520px !important;
+  object-position: center top !important;
+}
+
+html.gl-desktop-request .gl-service-media,
+html.gl-desktop-request .gl-service-detail,
+html.gl-desktop-request .gl-service-card,
+html.gl-desktop-request .gallery-shot {
+  background: #ffffff !important;
+}
+
