@@ -11949,3 +11949,22 @@ html.gl-desktop-request .gl-ios-actions svg {
   -webkit-animation: none !important;
 }
 
+.gl-footer .gl-footer-location,
+.gl-footer .gl-footer-location:visited {
+  display: inline-block !important;
+  margin-top: 8px !important;
+  color: rgba(255, 255, 255, 0.86) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.86) !important;
+  line-height: 1.65 !important;
+  text-decoration: none !important;
+}
+
+.gl-footer .gl-footer-location:hover,
+.gl-footer .gl-footer-location:focus-visible {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-decoration-line: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 5px !important;
+}
+
