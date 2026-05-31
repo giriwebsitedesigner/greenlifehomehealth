@@ -3889,6 +3889,45 @@ body {
   }
 }
 
+/* Client update: uploaded homepage photo and longer nurse-count text without overflow. */
+body.page-home .gl-stats-strip .stat {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+body.page-home .gl-stats-strip .gl-nurses-stat {
+  grid-template-columns: auto minmax(0, auto) !important;
+}
+
+body.page-home .gl-stats-strip .gl-nurses-stat span:first-of-type {
+  white-space: nowrap !important;
+  align-self: center !important;
+  font-size: clamp(1rem, 2.2vw, 1.45rem) !important;
+}
+
+body.page-home .gl-stats-strip .gl-nurses-stat span:last-of-type {
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  text-wrap: balance !important;
+}
+
+@media (max-width: 680px) {
+  body.page-home .gl-stats-strip .container {
+    grid-template-columns: 1fr !important;
+    max-width: min(420px, calc(100vw - 28px)) !important;
+  }
+
+  body.page-home .gl-stats-strip .stat {
+    min-height: 104px !important;
+    padding: 16px 12px !important;
+  }
+
+  body.page-home .gl-stats-strip .gl-nurses-stat span:last-of-type {
+    font-size: clamp(0.76rem, 3.5vw, 0.92rem) !important;
+    line-height: 1.22 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *:before,
@@ -11966,3 +12005,130 @@ html.gl-desktop-request .gl-ios-actions svg {
   text-decoration: none !important;
 }
 
+/* Restore full motion layer for the updated reference experience. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-home .gl-hero-img,
+  .page-home .gl-hero-img:hover,
+  .page-home .gl-hero.visible .gl-hero-img,
+  .page-home .gl-hero-img.visible {
+    animation: homeHeroBreath 16s ease-in-out infinite alternate !important;
+    transition: transform 0.8s ease, filter 0.8s ease !important;
+    transform-origin: center !important;
+  }
+
+  .gl-page .reveal,
+  .gl-page .reveal[data-motion],
+  .gl-card.reveal,
+  .gl-service-card.reveal,
+  .review-card.reveal,
+  .gl-service-detail.reveal,
+  .gl-gallery-masonry img.reveal,
+  .gl-gallery-grid img.reveal,
+  .gl-split > .reveal,
+  .gl-page-hero-grid > .reveal,
+  .gl-appointment-copy.reveal,
+  .gl-form.reveal {
+    opacity: 0 !important;
+    transition:
+      opacity 0.75s cubic-bezier(0.2, 0.8, 0.25, 1),
+      transform 0.75s cubic-bezier(0.2, 0.8, 0.25, 1),
+      filter 0.75s cubic-bezier(0.2, 0.8, 0.25, 1) !important;
+  }
+
+  .gl-page .reveal.visible,
+  .gl-page .reveal[data-motion].visible,
+  .gl-card.reveal.visible,
+  .gl-service-card.reveal.visible,
+  .review-card.reveal.visible,
+  .gl-service-detail.reveal.visible,
+  .gl-gallery-masonry img.reveal.visible,
+  .gl-gallery-grid img.reveal.visible,
+  .gl-split > .reveal.visible,
+  .gl-page-hero-grid > .reveal.visible,
+  .gl-appointment-copy.reveal.visible,
+  .gl-form.reveal.visible {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .page-home .gl-service-card.reveal.visible,
+  .page-home .gl-service-card[data-motion].visible {
+    animation: servicePreviewRise 0.68s cubic-bezier(0.2, 0.8, 0.25, 1) both !important;
+  }
+
+  .page-home .gl-trust-stack div {
+    opacity: 0;
+    animation: homeTrustCard 0.7s ease forwards !important;
+  }
+
+  .page-home .gl-trust-stack div:nth-child(1) { animation-delay: 0.28s !important; }
+  .page-home .gl-trust-stack div:nth-child(2) { animation-delay: 0.42s !important; }
+  .page-home .gl-trust-stack div:nth-child(3) { animation-delay: 0.56s !important; }
+
+  .gl-ios-actions a,
+  .gl-ios-actions .wa,
+  .gl-ios-actions .phone,
+  html.gl-desktop-request .gl-ios-actions a,
+  html.gl-desktop-request .gl-ios-actions .wa,
+  html.gl-desktop-request .gl-ios-actions .phone {
+    animation: ctaHeartbeatPulse 2.8s ease-in-out infinite !important;
+    transition: transform 0.22s ease, box-shadow 0.22s ease !important;
+  }
+
+  .gl-ios-actions a:hover,
+  .gl-ios-actions .wa:hover,
+  .gl-ios-actions .phone:hover,
+  html.gl-desktop-request .gl-ios-actions a:hover {
+    animation-play-state: paused !important;
+    transform: translateY(-3px) scale(1.04) !important;
+  }
+
+  .gl-kicker:before,
+  .gl-icon,
+  .gl-flow span,
+  .float-actions a,
+  .float-actions svg,
+  .float-actions img {
+    animation: ctaHeartbeatPulse 2.8s ease-in-out infinite !important;
+  }
+}
+
+/* Final nurse-count guard: keep "100 Plus Expert Nurses All Over Chennai" readable. */
+body.page-home .gl-stats-strip .stat {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+body.page-home .gl-stats-strip .gl-nurses-stat {
+  grid-template-columns: auto minmax(0, auto) !important;
+}
+
+body.page-home .gl-stats-strip .gl-nurses-stat span:first-of-type {
+  white-space: nowrap !important;
+  align-self: center !important;
+  font-size: clamp(1rem, 2.2vw, 1.45rem) !important;
+}
+
+body.page-home .gl-stats-strip .gl-nurses-stat span:last-of-type {
+  max-width: 100% !important;
+  line-height: 1.22 !important;
+  overflow-wrap: anywhere !important;
+  text-wrap: balance !important;
+}
+
+@media (max-width: 680px) {
+  body.page-home .gl-stats-strip .container {
+    grid-template-columns: 1fr !important;
+    max-width: min(420px, calc(100vw - 28px)) !important;
+  }
+
+  body.page-home .gl-stats-strip .stat {
+    min-height: 104px !important;
+    padding: 16px 12px !important;
+  }
+
+  body.page-home .gl-stats-strip .gl-nurses-stat span:last-of-type {
+    font-size: clamp(0.76rem, 3.5vw, 0.92rem) !important;
+  }
+}
