@@ -9424,6 +9424,13 @@ body.page-home main > .gl-section:nth-of-type(5) .eyebrow {
   color: var(--gl-final-green) !important;
 }
 
+.page-testimonials .gl-review-tags span {
+  background: #f0faf4 !important;
+  border: 1px solid rgba(39, 124, 51, 0.22) !important;
+  color: var(--gl-final-green-dark) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55) !important;
+}
+
 .page-testimonials .review-card,
 .page-testimonials .review-card.reveal,
 .page-testimonials .review-card.reveal.visible {
