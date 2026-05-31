@@ -3913,11 +3913,14 @@ body.page-home .gl-stats-strip .gl-nurses-stat span:last-of-type {
 
 @media (max-width: 680px) {
   body.page-home .gl-stats-strip .container {
-    grid-template-columns: 1fr !important;
-    max-width: min(420px, calc(100vw - 28px)) !important;
+    grid-template-columns: none !important;
+    max-width: none !important;
+    gap: 12px !important;
   }
 
   body.page-home .gl-stats-strip .stat {
+    flex-basis: min(82vw, 340px) !important;
+    width: min(82vw, 340px) !important;
     min-height: 104px !important;
     padding: 16px 12px !important;
   }
@@ -3927,6 +3930,7 @@ body.page-home .gl-stats-strip .gl-nurses-stat span:last-of-type {
     line-height: 1.22 !important;
   }
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -12094,7 +12098,7 @@ html.gl-desktop-request .gl-ios-actions svg {
   }
 }
 
-/* Final nurse-count guard: keep "100 Plus Expert Nurses All Over Chennai" readable. */
+/* Final nurse-count guard: keep "100 + Expert Nurses All Over Chennai" readable. */
 body.page-home .gl-stats-strip .stat {
   min-width: 0 !important;
   overflow: hidden !important;
@@ -12130,5 +12134,55 @@ body.page-home .gl-stats-strip .gl-nurses-stat span:last-of-type {
 
   body.page-home .gl-stats-strip .gl-nurses-stat span:last-of-type {
     font-size: clamp(0.76rem, 3.5vw, 0.92rem) !important;
+  }
+}
+
+/* Final homepage stats ticker: continuous left movement with duplicated cards. */
+body.page-home .gl-stats-strip {
+  overflow: hidden !important;
+}
+
+body.page-home .gl-stats-strip .container {
+  display: flex !important;
+  grid-template-columns: none !important;
+  width: max-content !important;
+  max-width: none !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+  will-change: transform !important;
+}
+
+body.page-home .gl-stats-strip .stat {
+  flex: 0 0 clamp(260px, 30vw, 380px) !important;
+  width: clamp(260px, 30vw, 380px) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body.page-home .gl-stats-strip .container {
+    animation: glStatsTickerScroll 20s linear infinite !important;
+  }
+
+  body.page-home .gl-stats-strip:hover .container {
+    animation-play-state: paused !important;
+  }
+}
+
+@media (max-width: 680px) {
+  body.page-home .gl-stats-strip .container {
+    gap: 12px !important;
+  }
+
+  body.page-home .gl-stats-strip .stat {
+    flex-basis: min(82vw, 340px) !important;
+    width: min(82vw, 340px) !important;
+  }
+}
+
+@keyframes glStatsTickerScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 9px));
   }
 }
