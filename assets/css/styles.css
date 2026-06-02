@@ -5527,13 +5527,10 @@ body.gl-modal-open {
 
 /* Gallery uses equal cards and gallery-only cropped photos to avoid printed text inside service images. */
 .page-gallery .gl-gallery-title {
-  display: inline-flex;
-  align-items: center;
-  min-height: 54px;
+  display: block;
   margin: 0 0 22px;
-  padding: 0 24px;
-  border-radius: 8px;
-  background: #0b6b3a;
+  padding: 0;
+  background: transparent;
   color: #ffffff !important;
   font-size: clamp(26px, 4vw, 42px);
   line-height: 1;
