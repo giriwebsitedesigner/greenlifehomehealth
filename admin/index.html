@@ -211,6 +211,22 @@
     line-height: 1.35;
   }
 
+  .detail-box {
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fbfffc;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .detail-box strong {
+    display: block;
+    color: var(--green-dark);
+    font-size: 14px;
+  }
+
   .preview-wrap {
     min-height: calc(100vh - 120px);
     overflow: hidden;
@@ -314,6 +330,7 @@
       <label>Page
         <select id="pageSelect"></select>
       </label>
+      <div class="detail-box" id="pageInfo"></div>
       <div class="actions">
         <button type="button" id="loadPage">Load Images</button>
         <button class="secondary" type="button" id="refreshPreview">Refresh Preview</button>
@@ -327,6 +344,7 @@
 
     <div class="group">
       <h2>Edit Selected Image</h2>
+      <div class="detail-box" id="selectedInfo">Select an image to see its page name, image name, path, and size.</div>
       <label>Alt text
         <textarea id="altText" placeholder="Image description"></textarea>
       </label>
@@ -400,13 +418,35 @@ const els = {
   galleryAlt: document.getElementById("galleryAlt"),
   status: document.getElementById("status"),
   preview: document.getElementById("preview"),
-  previewTitle: document.getElementById("previewTitle")
+  previewTitle: document.getElementById("previewTitle"),
+  pageInfo: document.getElementById("pageInfo"),
+  selectedInfo: document.getElementById("selectedInfo")
 };
+els.galleryTools = document.getElementById("galleryTools");
 
 let current = { path: "", html: "", sha: "", images: [], selected: -1 };
 
 function setStatus(message) {
   els.status.textContent = message;
+}
+
+function cleanError(error) {
+  try {
+    const data = JSON.parse(error.message);
+    return data.message || error.message;
+  } catch {
+    return error.message || String(error);
+  }
+}
+
+function escapeHtml(text) {
+  return String(text || "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
+  }[char]));
 }
 
 function settings() {
@@ -425,19 +465,25 @@ function apiUrl(path) {
 
 function headers() {
   const s = settings();
-  return {
+  const result = {
     "Accept": "application/vnd.github+json",
-    "Authorization": `Bearer ${s.token}`,
     "X-GitHub-Api-Version": "2022-11-28"
   };
+  if (s.token) result.Authorization = `Bearer ${s.token}`;
+  return result;
 }
 
 function utf8ToBase64(text) {
-  return btoa(unescape(encodeURIComponent(text)));
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  bytes.forEach((byte) => binary += String.fromCharCode(byte));
+  return btoa(binary);
 }
 
 function base64ToUtf8(text) {
-  return decodeURIComponent(escape(atob(text.replace(/\n/g, ""))));
+  const binary = atob(text.replace(/\n/g, ""));
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
 }
 
 function normalizeSrc(src, pagePath) {
@@ -456,6 +502,25 @@ function slug(text) {
   return (text || "green-life-image").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 44) || "green-life-image";
 }
 
+function assetPathFromSrc(src, pagePath) {
+  const url = normalizeSrc(src, pagePath);
+  const sitePath = new URL(siteBase + "/").pathname;
+  const urlPath = new URL(url).pathname;
+  if (urlPath.startsWith(sitePath)) return decodeURIComponent(urlPath.slice(sitePath.length));
+  return "";
+}
+
+function imageLabel(image, index) {
+  const page = selectedPage();
+  const path = assetPathFromSrc(image.src, page[1]) || image.src;
+  const file = path.split("/").pop() || `image-${index + 1}`;
+  return image.alt || file.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ");
+}
+
+function requireToken() {
+  if (!settings().token) throw new Error("Paste your GitHub token first, then save or upload.");
+}
+
 async function githubGet(path) {
   const s = settings();
   const response = await fetch(`${apiUrl(path)}?ref=${encodeURIComponent(s.branch)}`, { headers: headers() });
@@ -464,6 +529,7 @@ async function githubGet(path) {
 }
 
 async function githubPut(path, content, message, sha) {
+  requireToken();
   const s = settings();
   const body = {
     message,
@@ -508,11 +574,13 @@ async function resizeImage(file, width, height) {
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
-  const scale = Math.max(width / source.width, height / source.height);
+  const sourceWidth = source.naturalWidth || source.width;
+  const sourceHeight = source.naturalHeight || source.height;
+  const scale = Math.max(width / sourceWidth, height / sourceHeight);
   const sw = width / scale;
   const sh = height / scale;
-  const sx = (source.width - sw) / 2;
-  const sy = (source.height - sh) / 2;
+  const sx = (sourceWidth - sw) / 2;
+  const sy = (sourceHeight - sh) / 2;
   ctx.drawImage(source, sx, sy, sw, sh, 0, 0, width, height);
   return new Promise((resolve) => {
     canvas.toBlob((blob) => {
@@ -527,10 +595,22 @@ function selectedPage() {
   return pages[Number(els.pageSelect.value)];
 }
 
+function updatePageInfo() {
+  const page = selectedPage();
+  els.pageInfo.innerHTML = `<strong>${escapeHtml(page[0])}</strong>Page file: ${escapeHtml(page[1])}<br>Live URL: ${escapeHtml(siteBase + "/" + page[2])}`;
+  els.galleryTools.style.display = page[1] === "gallery/index.html" ? "grid" : "none";
+}
+
 function refreshPreview() {
   const page = selectedPage();
   els.preview.src = `${siteBase}/${page[2]}?v=${Date.now()}`;
   els.previewTitle.textContent = `Preview: ${page[0]}`;
+  updatePageInfo();
+}
+
+async function ensureLoadedSelectedPage() {
+  const page = selectedPage();
+  if (current.path !== page[1] || !current.html) await loadPageImages();
 }
 
 async function loadPageImages() {
@@ -546,6 +626,7 @@ async function loadPageImages() {
     src: img.getAttribute("src") || "",
     alt: img.getAttribute("alt") || "",
     className: img.getAttribute("class") || "",
+    role: img.closest(".gl-gallery-masonry") ? "Gallery image" : img.closest("header") ? "Header logo" : img.closest("footer") ? "Footer logo" : "Page image",
     url: normalizeSrc(img.getAttribute("src") || "", page[1])
   }));
   renderImages();
@@ -557,24 +638,40 @@ function renderImages() {
   els.imageList.innerHTML = "";
   els.matchImage.innerHTML = "";
   current.images.forEach((image, index) => {
+    const page = selectedPage();
+    const path = assetPathFromSrc(image.src, page[1]) || image.src;
+    const label = imageLabel(image, index);
     const button = document.createElement("button");
     button.type = "button";
     button.className = "image-item" + (current.selected === index ? " active" : "");
-    button.innerHTML = `<img src="${image.url}" alt=""><span><strong>${image.alt || "No alt text"}</strong><span>${image.src}</span></span>`;
+    button.innerHTML = `<img src="${escapeHtml(image.url)}" alt=""><span><strong>${escapeHtml(label)}</strong><span>${escapeHtml(image.role)} | ${escapeHtml(path)}</span></span>`;
     button.addEventListener("click", () => selectImage(index));
     els.imageList.appendChild(button);
 
     const option = document.createElement("option");
     option.value = index;
-    option.textContent = image.alt || image.src || `Image ${index + 1}`;
+    option.textContent = `${label} - ${path}`;
     els.matchImage.appendChild(option);
   });
+  if (!current.images.length) {
+    els.imageList.innerHTML = `<div class="detail-box">No images found on this page.</div>`;
+    els.selectedInfo.textContent = "Select another page to manage images.";
+  }
 }
 
 function selectImage(index) {
   current.selected = index;
-  els.altText.value = current.images[index]?.alt || "";
+  const image = current.images[index];
+  els.altText.value = image?.alt || "";
   renderImages();
+  if (!image) return;
+  const page = selectedPage();
+  const path = assetPathFromSrc(image.src, page[1]) || image.src;
+  els.selectedInfo.innerHTML = `<strong>${escapeHtml(imageLabel(image, index))}</strong>Page: ${escapeHtml(page[0])}<br>Type: ${escapeHtml(image.role)}<br>Path: ${escapeHtml(path)}<br>Checking image size...`;
+  imageSize(image.url).then((size) => {
+    if (current.selected !== index) return;
+    els.selectedInfo.innerHTML = `<strong>${escapeHtml(imageLabel(image, index))}</strong>Page: ${escapeHtml(page[0])}<br>Type: ${escapeHtml(image.role)}<br>Path: ${escapeHtml(path)}<br>Current size: ${size.width} x ${size.height}px`;
+  });
 }
 
 async function updatePageHtml(doc, message) {
@@ -586,6 +683,7 @@ async function updatePageHtml(doc, message) {
 }
 
 async function replaceSelectedImage() {
+  await ensureLoadedSelectedPage();
   if (current.selected < 0) return setStatus("Select an image first.");
   const file = els.replaceFile.files[0];
   if (!file) return setStatus("Choose a replacement image first.");
@@ -605,6 +703,7 @@ async function replaceSelectedImage() {
 }
 
 async function saveAltText() {
+  await ensureLoadedSelectedPage();
   if (current.selected < 0) return setStatus("Select an image first.");
   const doc = new DOMParser().parseFromString(current.html, "text/html");
   const image = current.images[current.selected];
@@ -614,6 +713,7 @@ async function saveAltText() {
 }
 
 async function deleteSelectedImage() {
+  await ensureLoadedSelectedPage();
   if (current.selected < 0) return setStatus("Select an image first.");
   if (!confirm("Delete this image from the page layout?")) return;
   const doc = new DOMParser().parseFromString(current.html, "text/html");
@@ -626,6 +726,7 @@ async function deleteSelectedImage() {
 async function addGalleryImage() {
   const page = selectedPage();
   if (page[1] !== "gallery/index.html") return setStatus("Choose Gallery page first.");
+  await ensureLoadedSelectedPage();
   const file = els.galleryFile.files[0];
   if (!file) return setStatus("Choose a gallery image first.");
   const match = current.images[Number(els.matchImage.value)] || current.images[0];
@@ -663,7 +764,7 @@ function loadSettings() {
 pages.forEach((page, index) => {
   const option = document.createElement("option");
   option.value = index;
-  option.textContent = page[0];
+  option.textContent = `${page[0]} - ${page[1]}`;
   els.pageSelect.appendChild(option);
 });
 
@@ -673,14 +774,20 @@ document.getElementById("clearSettings").addEventListener("click", () => {
   els.token.value = "";
   setStatus("Saved token cleared.");
 });
-document.getElementById("loadPage").addEventListener("click", () => loadPageImages().catch((error) => setStatus(error.message)));
+document.getElementById("loadPage").addEventListener("click", () => loadPageImages().catch((error) => setStatus(cleanError(error))));
 document.getElementById("refreshPreview").addEventListener("click", refreshPreview);
-document.getElementById("replaceImage").addEventListener("click", () => replaceSelectedImage().catch((error) => setStatus(error.message)));
-document.getElementById("saveAlt").addEventListener("click", () => saveAltText().catch((error) => setStatus(error.message)));
-document.getElementById("deleteImage").addEventListener("click", () => deleteSelectedImage().catch((error) => setStatus(error.message)));
-document.getElementById("addGalleryImage").addEventListener("click", () => addGalleryImage().catch((error) => setStatus(error.message)));
+document.getElementById("replaceImage").addEventListener("click", () => replaceSelectedImage().catch((error) => setStatus(cleanError(error))));
+document.getElementById("saveAlt").addEventListener("click", () => saveAltText().catch((error) => setStatus(cleanError(error))));
+document.getElementById("deleteImage").addEventListener("click", () => deleteSelectedImage().catch((error) => setStatus(cleanError(error))));
+document.getElementById("addGalleryImage").addEventListener("click", () => addGalleryImage().catch((error) => setStatus(cleanError(error))));
 document.getElementById("openSite").addEventListener("click", () => window.open(siteBase + "/", "_blank", "noopener"));
-els.pageSelect.addEventListener("change", refreshPreview);
+els.pageSelect.addEventListener("change", () => {
+  current = { path: "", html: "", sha: "", images: [], selected: -1 };
+  els.imageList.innerHTML = "";
+  els.matchImage.innerHTML = "";
+  els.selectedInfo.textContent = "Select an image to see its page name, image name, path, and size.";
+  refreshPreview();
+});
 
 loadSettings();
 refreshPreview();
