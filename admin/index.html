@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Green Life Admin Panel</title>
+<style>
+  :root {
+    --green: #0d8f43;
+    --green-dark: #075b2b;
+    --green-soft: #e9f8ef;
+    --ink: #102418;
+    --muted: #617269;
+    --line: #bfebcf;
+    --panel: #ffffff;
+    --page: #f4fbf7;
+    --danger: #b3261e;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--page);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 22px;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 10px 30px rgba(7, 91, 43, 0.08);
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    margin-top: 0;
+  }
+
+  h1 {
+    margin-bottom: 3px;
+    font-size: clamp(20px, 3vw, 30px);
+    color: var(--green-dark);
+  }
+
+  .topbar p,
+  .muted {
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(300px, 390px) 1fr;
+    gap: 18px;
+    padding: 18px;
+  }
+
+  .panel,
+  .preview-wrap {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 18px 50px rgba(7, 91, 43, 0.08);
+  }
+
+  .panel {
+    display: grid;
+    gap: 16px;
+    padding: 16px;
+    align-content: start;
+  }
+
+  .group {
+    display: grid;
+    gap: 10px;
+  }
+
+  label {
+    display: grid;
+    gap: 7px;
+    color: var(--green-dark);
+    font-weight: 800;
+    font-size: 13px;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--ink);
+    background: #fff;
+  }
+
+  textarea {
+    min-height: 82px;
+    resize: vertical;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+  }
+
+  button {
+    min-height: 42px;
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 0 13px;
+    cursor: pointer;
+    background: var(--green);
+    color: #fff;
+    font-weight: 900;
+  }
+
+  button.secondary {
+    color: var(--green-dark);
+    background: var(--green-soft);
+    border-color: var(--line);
+  }
+
+  button.danger {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+  }
+
+  .image-list {
+    display: grid;
+    gap: 10px;
+    max-height: 360px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .image-item {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fbfffc;
+    text-align: left;
+    color: var(--ink);
+  }
+
+  .image-item.active {
+    outline: 3px solid rgba(13, 143, 67, 0.18);
+    border-color: var(--green);
+  }
+
+  .image-item img {
+    width: 82px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: var(--green-soft);
+  }
+
+  .image-item strong {
+    display: block;
+    overflow: hidden;
+    color: var(--green-dark);
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .image-item span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .preview-wrap {
+    min-height: calc(100vh - 120px);
+    overflow: hidden;
+  }
+
+  .preview-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  iframe {
+    width: 100%;
+    height: calc(100vh - 176px);
+    min-height: 620px;
+    border: 0;
+    background: #fff;
+  }
+
+  .notice {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--green-soft);
+    color: var(--green-dark);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .status {
+    min-height: 22px;
+    color: var(--green-dark);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  @media (max-width: 980px) {
+    .topbar,
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .layout {
+      padding: 12px;
+    }
+
+    .row {
+      grid-template-columns: 1fr;
+    }
+
+    iframe {
+      height: 72vh;
+      min-height: 460px;
+    }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <h1>Green Life Admin Panel</h1>
+    <p>Hidden image manager for page photos and gallery updates.</p>
+  </div>
+  <button class="secondary" type="button" id="openSite">Open Website</button>
+</header>
+
+<main class="layout">
+  <section class="panel" aria-label="Admin controls">
+    <div class="notice">
+      Enter a GitHub token with repository content access. Changes are saved as commits to the website, and the uploaded image is automatically cropped/resized to match the selected image size.
+    </div>
+
+    <div class="group">
+      <div class="row">
+        <label>GitHub owner
+          <input id="owner" value="giriwebsitedesigner" autocomplete="off">
+        </label>
+        <label>Repository
+          <input id="repo" value="greenlifehomehealth" autocomplete="off">
+        </label>
+      </div>
+      <div class="row">
+        <label>Branch
+          <input id="branch" value="main" autocomplete="off">
+        </label>
+        <label>GitHub token
+          <input id="token" type="password" placeholder="Paste token here" autocomplete="off">
+        </label>
+      </div>
+      <div class="actions">
+        <button type="button" id="saveSettings">Save Settings</button>
+        <button class="secondary" type="button" id="clearSettings">Clear Token</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <label>Page
+        <select id="pageSelect"></select>
+      </label>
+      <div class="actions">
+        <button type="button" id="loadPage">Load Images</button>
+        <button class="secondary" type="button" id="refreshPreview">Refresh Preview</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Images</h2>
+      <div class="image-list" id="imageList"></div>
+    </div>
+
+    <div class="group">
+      <h2>Edit Selected Image</h2>
+      <label>Alt text
+        <textarea id="altText" placeholder="Image description"></textarea>
+      </label>
+      <label>Upload replacement
+        <input id="replaceFile" type="file" accept="image/png,image/jpeg,image/webp">
+      </label>
+      <div class="actions">
+        <button type="button" id="replaceImage">Replace / Modify</button>
+        <button class="secondary" type="button" id="saveAlt">Save Alt Text</button>
+        <button class="danger" type="button" id="deleteImage">Delete From Page</button>
+      </div>
+    </div>
+
+    <div class="group" id="galleryTools">
+      <h2>Gallery Add Option</h2>
+      <label>New gallery image
+        <input id="galleryFile" type="file" accept="image/png,image/jpeg,image/webp">
+      </label>
+      <label>Alt text
+        <input id="galleryAlt" placeholder="Nursing care at home">
+      </label>
+      <label>Match size with
+        <select id="matchImage"></select>
+      </label>
+      <button type="button" id="addGalleryImage">Add Image To Gallery</button>
+    </div>
+
+    <p class="status" id="status" role="status"></p>
+  </section>
+
+  <section class="preview-wrap" aria-label="Website preview">
+    <div class="preview-head">
+      <strong id="previewTitle">Preview</strong>
+      <span class="muted">Works on desktop, tablet, and mobile browsers.</span>
+    </div>
+    <iframe id="preview" title="Website page preview"></iframe>
+  </section>
+</main>
+
+<script>
+const siteBase = "https://giriwebsitedesigner.github.io/greenlifehomehealth";
+const pages = [
+  ["Home", "index.html", "./"],
+  ["About", "about/index.html", "about/"],
+  ["Services", "services/index.html", "services/"],
+  ["Appointment", "appointment/index.html", "appointment/"],
+  ["Testimonials", "testimonials/index.html", "testimonials/"],
+  ["Contact", "contact/index.html", "contact/"],
+  ["Gallery", "gallery/index.html", "gallery/"],
+  ["Nursing Care", "services/nursing-care/index.html", "services/nursing-care/"],
+  ["Physiotherapy", "services/physiotherapy/index.html", "services/physiotherapy/"],
+  ["Post Operative Care", "services/post-operative-care/index.html", "services/post-operative-care/"],
+  ["Elder Care", "services/elder-care/index.html", "services/elder-care/"],
+  ["Palliative Care", "services/palliative-care/index.html", "services/palliative-care/"],
+  ["Doctor Visit", "services/doctor-visit/index.html", "services/doctor-visit/"],
+  ["Pediatric Care", "services/pediatric-care/index.html", "services/pediatric-care/"],
+  ["Professional Caregiver", "services/professional-caregiver/index.html", "services/professional-caregiver/"]
+];
+
+const els = {
+  owner: document.getElementById("owner"),
+  repo: document.getElementById("repo"),
+  branch: document.getElementById("branch"),
+  token: document.getElementById("token"),
+  pageSelect: document.getElementById("pageSelect"),
+  imageList: document.getElementById("imageList"),
+  matchImage: document.getElementById("matchImage"),
+  altText: document.getElementById("altText"),
+  replaceFile: document.getElementById("replaceFile"),
+  galleryFile: document.getElementById("galleryFile"),
+  galleryAlt: document.getElementById("galleryAlt"),
+  status: document.getElementById("status"),
+  preview: document.getElementById("preview"),
+  previewTitle: document.getElementById("previewTitle")
+};
+
+let current = { path: "", html: "", sha: "", images: [], selected: -1 };
+
+function setStatus(message) {
+  els.status.textContent = message;
+}
+
+function settings() {
+  return {
+    owner: els.owner.value.trim(),
+    repo: els.repo.value.trim(),
+    branch: els.branch.value.trim(),
+    token: els.token.value.trim()
+  };
+}
+
+function apiUrl(path) {
+  const s = settings();
+  return `https://api.github.com/repos/${s.owner}/${s.repo}/contents/${encodeURIComponent(path).replace(/%2F/g, "/")}`;
+}
+
+function headers() {
+  const s = settings();
+  return {
+    "Accept": "application/vnd.github+json",
+    "Authorization": `Bearer ${s.token}`,
+    "X-GitHub-Api-Version": "2022-11-28"
+  };
+}
+
+function utf8ToBase64(text) {
+  return btoa(unescape(encodeURIComponent(text)));
+}
+
+function base64ToUtf8(text) {
+  return decodeURIComponent(escape(atob(text.replace(/\n/g, ""))));
+}
+
+function normalizeSrc(src, pagePath) {
+  if (/^https?:\/\//i.test(src)) return src;
+  const pageDir = pagePath.includes("/") ? pagePath.split("/").slice(0, -1).join("/") + "/" : "";
+  return new URL(src, `${siteBase}/${pageDir}`).href;
+}
+
+function relativeFromPage(assetPath, pagePath) {
+  const from = pagePath.split("/").slice(0, -1).filter(Boolean);
+  const up = from.map(() => "..");
+  return [...up, ...assetPath.split("/")].join("/") || assetPath;
+}
+
+function slug(text) {
+  return (text || "green-life-image").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 44) || "green-life-image";
+}
+
+async function githubGet(path) {
+  const s = settings();
+  const response = await fetch(`${apiUrl(path)}?ref=${encodeURIComponent(s.branch)}`, { headers: headers() });
+  if (!response.ok) throw new Error(await response.text());
+  return response.json();
+}
+
+async function githubPut(path, content, message, sha) {
+  const s = settings();
+  const body = {
+    message,
+    content,
+    branch: s.branch
+  };
+  if (sha) body.sha = sha;
+  const response = await fetch(apiUrl(path), {
+    method: "PUT",
+    headers: { ...headers(), "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!response.ok) throw new Error(await response.text());
+  return response.json();
+}
+
+async function imageSize(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve({ width: img.naturalWidth || 1200, height: img.naturalHeight || 820 });
+    img.onerror = () => resolve({ width: 1200, height: 820 });
+    img.src = url + (url.includes("?") ? "&" : "?") + "admin-cache=" + Date.now();
+  });
+}
+
+async function resizeImage(file, width, height) {
+  const source = await new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Could not read selected image."));
+    };
+    img.src = url;
+  });
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  const scale = Math.max(width / source.width, height / source.height);
+  const sw = width / scale;
+  const sh = height / scale;
+  const sx = (source.width - sw) / 2;
+  const sy = (source.height - sh) / 2;
+  ctx.drawImage(source, sx, sy, sw, sh, 0, 0, width, height);
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.readAsDataURL(blob);
+    }, "image/jpeg", 0.88);
+  });
+}
+
+function selectedPage() {
+  return pages[Number(els.pageSelect.value)];
+}
+
+function refreshPreview() {
+  const page = selectedPage();
+  els.preview.src = `${siteBase}/${page[2]}?v=${Date.now()}`;
+  els.previewTitle.textContent = `Preview: ${page[0]}`;
+}
+
+async function loadPageImages() {
+  const page = selectedPage();
+  current = { path: page[1], html: "", sha: "", images: [], selected: -1 };
+  setStatus("Loading page images...");
+  const data = await githubGet(page[1]);
+  current.html = base64ToUtf8(data.content);
+  current.sha = data.sha;
+  const doc = new DOMParser().parseFromString(current.html, "text/html");
+  current.images = Array.from(doc.querySelectorAll("img")).map((img, index) => ({
+    index,
+    src: img.getAttribute("src") || "",
+    alt: img.getAttribute("alt") || "",
+    className: img.getAttribute("class") || "",
+    url: normalizeSrc(img.getAttribute("src") || "", page[1])
+  }));
+  renderImages();
+  refreshPreview();
+  setStatus(`${current.images.length} images loaded.`);
+}
+
+function renderImages() {
+  els.imageList.innerHTML = "";
+  els.matchImage.innerHTML = "";
+  current.images.forEach((image, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "image-item" + (current.selected === index ? " active" : "");
+    button.innerHTML = `<img src="${image.url}" alt=""><span><strong>${image.alt || "No alt text"}</strong><span>${image.src}</span></span>`;
+    button.addEventListener("click", () => selectImage(index));
+    els.imageList.appendChild(button);
+
+    const option = document.createElement("option");
+    option.value = index;
+    option.textContent = image.alt || image.src || `Image ${index + 1}`;
+    els.matchImage.appendChild(option);
+  });
+}
+
+function selectImage(index) {
+  current.selected = index;
+  els.altText.value = current.images[index]?.alt || "";
+  renderImages();
+}
+
+async function updatePageHtml(doc, message) {
+  const html = "<!doctype html>\n" + doc.documentElement.outerHTML;
+  const saved = await githubPut(current.path, utf8ToBase64(html), message, current.sha);
+  current.html = html;
+  current.sha = saved.content.sha;
+  await loadPageImages();
+}
+
+async function replaceSelectedImage() {
+  if (current.selected < 0) return setStatus("Select an image first.");
+  const file = els.replaceFile.files[0];
+  if (!file) return setStatus("Choose a replacement image first.");
+  const image = current.images[current.selected];
+  setStatus("Resizing and uploading replacement image...");
+  const size = await imageSize(image.url);
+  const content = await resizeImage(file, size.width, size.height);
+  const assetPath = `assets/photos/admin/${Date.now()}-${slug(file.name)}.jpg`;
+  await githubPut(assetPath, content, `Upload resized admin image: ${file.name}`);
+  const doc = new DOMParser().parseFromString(current.html, "text/html");
+  const img = doc.querySelectorAll("img")[image.index];
+  img.setAttribute("src", relativeFromPage(assetPath, current.path));
+  if (els.altText.value.trim()) img.setAttribute("alt", els.altText.value.trim());
+  await updatePageHtml(doc, `Update image on ${current.path}`);
+  els.replaceFile.value = "";
+  setStatus("Image replaced and resized successfully.");
+}
+
+async function saveAltText() {
+  if (current.selected < 0) return setStatus("Select an image first.");
+  const doc = new DOMParser().parseFromString(current.html, "text/html");
+  const image = current.images[current.selected];
+  doc.querySelectorAll("img")[image.index].setAttribute("alt", els.altText.value.trim());
+  await updatePageHtml(doc, `Update image alt text on ${current.path}`);
+  setStatus("Alt text saved.");
+}
+
+async function deleteSelectedImage() {
+  if (current.selected < 0) return setStatus("Select an image first.");
+  if (!confirm("Delete this image from the page layout?")) return;
+  const doc = new DOMParser().parseFromString(current.html, "text/html");
+  const image = current.images[current.selected];
+  doc.querySelectorAll("img")[image.index].remove();
+  await updatePageHtml(doc, `Delete image from ${current.path}`);
+  setStatus("Image removed from the page.");
+}
+
+async function addGalleryImage() {
+  const page = selectedPage();
+  if (page[1] !== "gallery/index.html") return setStatus("Choose Gallery page first.");
+  const file = els.galleryFile.files[0];
+  if (!file) return setStatus("Choose a gallery image first.");
+  const match = current.images[Number(els.matchImage.value)] || current.images[0];
+  const size = match ? await imageSize(match.url) : { width: 1200, height: 820 };
+  setStatus("Resizing and adding gallery image...");
+  const content = await resizeImage(file, size.width, size.height);
+  const assetPath = `assets/photos/admin/gallery-${Date.now()}-${slug(file.name)}.jpg`;
+  await githubPut(assetPath, content, `Upload gallery image: ${file.name}`);
+  const doc = new DOMParser().parseFromString(current.html, "text/html");
+  const gallery = doc.querySelector(".gl-gallery-masonry");
+  if (!gallery) throw new Error("Gallery container not found.");
+  const img = doc.createElement("img");
+  img.setAttribute("class", "reveal");
+  img.setAttribute("src", relativeFromPage(assetPath, current.path));
+  img.setAttribute("alt", els.galleryAlt.value.trim() || "Green Life home healthcare gallery image");
+  gallery.appendChild(img);
+  await updatePageHtml(doc, "Add image to gallery");
+  els.galleryFile.value = "";
+  els.galleryAlt.value = "";
+  setStatus("Gallery image added with matching size and animation.");
+}
+
+function saveSettings() {
+  localStorage.setItem("gl-admin-settings", JSON.stringify(settings()));
+  setStatus("Settings saved in this browser.");
+}
+
+function loadSettings() {
+  const saved = JSON.parse(localStorage.getItem("gl-admin-settings") || "{}");
+  ["owner", "repo", "branch", "token"].forEach((key) => {
+    if (saved[key]) els[key].value = saved[key];
+  });
+}
+
+pages.forEach((page, index) => {
+  const option = document.createElement("option");
+  option.value = index;
+  option.textContent = page[0];
+  els.pageSelect.appendChild(option);
+});
+
+document.getElementById("saveSettings").addEventListener("click", saveSettings);
+document.getElementById("clearSettings").addEventListener("click", () => {
+  localStorage.removeItem("gl-admin-settings");
+  els.token.value = "";
+  setStatus("Saved token cleared.");
+});
+document.getElementById("loadPage").addEventListener("click", () => loadPageImages().catch((error) => setStatus(error.message)));
+document.getElementById("refreshPreview").addEventListener("click", refreshPreview);
+document.getElementById("replaceImage").addEventListener("click", () => replaceSelectedImage().catch((error) => setStatus(error.message)));
+document.getElementById("saveAlt").addEventListener("click", () => saveAltText().catch((error) => setStatus(error.message)));
+document.getElementById("deleteImage").addEventListener("click", () => deleteSelectedImage().catch((error) => setStatus(error.message)));
+document.getElementById("addGalleryImage").addEventListener("click", () => addGalleryImage().catch((error) => setStatus(error.message)));
+document.getElementById("openSite").addEventListener("click", () => window.open(siteBase + "/", "_blank", "noopener"));
+els.pageSelect.addEventListener("change", refreshPreview);
+
+loadSettings();
+refreshPreview();
+</script>
+</body>
+</html>
