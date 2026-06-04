@@ -12203,3 +12203,69 @@ body.page-home .gl-stats-strip .stat {
     transform: translateX(calc(-50% - 9px));
   }
 }
+.brand {
+  gap: 0 !important;
+}
+
+.brand > span,
+.navbar .brand > span,
+.gl-nav .brand > span,
+.brand small,
+.navbar .brand small,
+.gl-nav .brand small,
+.footer .brand > span,
+.gl-footer .brand > span,
+.footer .brand small,
+.gl-footer .brand small {
+  display: none !important;
+}
+
+.logo-mark,
+.navbar .logo-mark,
+.gl-nav .logo-mark {
+  width: 86px !important;
+  height: 86px !important;
+  border-radius: 0 !important;
+  object-fit: contain !important;
+}
+
+.navbar .brand,
+.gl-nav .brand {
+  min-width: 86px !important;
+}
+
+.gl-footer .logo-mark,
+.footer .logo-mark {
+  width: 124px !important;
+  height: 124px !important;
+}
+
+.gl-footer .brand,
+.footer .brand {
+  align-items: flex-start !important;
+}
+
+.gl-loader-mark {
+  width: 124px !important;
+  height: 124px !important;
+  border-radius: 50% !important;
+}
+
+.gl-loader-mark img {
+  width: 106px !important;
+  height: 106px !important;
+}
+
+@media (max-width: 640px) {
+  .logo-mark,
+  .navbar .logo-mark,
+  .gl-nav .logo-mark {
+    width: 72px !important;
+    height: 72px !important;
+  }
+
+  .navbar .brand,
+  .gl-nav .brand {
+    min-width: 72px !important;
+  }
+}
