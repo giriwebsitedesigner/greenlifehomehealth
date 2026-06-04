@@ -51,7 +51,7 @@
     loader.innerHTML =
       '<div class="gl-loader-card">' +
         '<div class="gl-loader-mark">' +
-          '<img src="' + assetUrl("icons/green-life-loader-logo.png?v=1") + '" alt="">' +
+          '<img src="' + assetUrl("icons/green-life-loader-logo.png?v=2") + '" alt="">' +
         '</div>' +
         '<div class="gl-loader-title">Green Life</div>' +
         '<div class="gl-loader-subtitle">Home Health Care</div>' +

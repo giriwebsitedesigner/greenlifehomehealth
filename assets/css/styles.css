@@ -12203,69 +12203,92 @@ body.page-home .gl-stats-strip .stat {
     transform: translateX(calc(-50% - 9px));
   }
 }
-.brand {
-  gap: 0 !important;
+.brand,
+.navbar .brand,
+.gl-nav .brand {
+  gap: 10px !important;
+  min-width: 184px !important;
 }
 
 .brand > span,
 .navbar .brand > span,
-.gl-nav .brand > span,
+.gl-nav .brand > span {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
 .brand small,
 .navbar .brand small,
-.gl-nav .brand small,
-.footer .brand > span,
-.gl-footer .brand > span,
-.footer .brand small,
-.gl-footer .brand small {
-  display: none !important;
+.gl-nav .brand small {
+  display: block !important;
 }
 
 .logo-mark,
 .navbar .logo-mark,
 .gl-nav .logo-mark {
-  width: 86px !important;
-  height: 86px !important;
-  border-radius: 0 !important;
+  width: 54px !important;
+  height: 54px !important;
+  padding: 3px !important;
+  border-radius: 12px !important;
   object-fit: contain !important;
-}
-
-.navbar .brand,
-.gl-nav .brand {
-  min-width: 86px !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 22px rgba(13, 90, 45, 0.12) !important;
 }
 
 .gl-footer .logo-mark,
 .footer .logo-mark {
-  width: 124px !important;
-  height: 124px !important;
+  width: 62px !important;
+  height: 62px !important;
+  box-shadow: none !important;
 }
 
-.gl-footer .brand,
-.footer .brand {
-  align-items: flex-start !important;
+.gl-footer .brand > span,
+.footer .brand > span {
+  color: #ffffff !important;
+}
+
+.gl-footer .brand small,
+.footer .brand small {
+  color: #d8efe2 !important;
 }
 
 .gl-loader-mark {
-  width: 124px !important;
-  height: 124px !important;
-  border-radius: 50% !important;
+  width: 158px !important;
+  height: 158px !important;
+  padding: 8px !important;
+  border-radius: 22px !important;
 }
 
 .gl-loader-mark img {
-  width: 106px !important;
-  height: 106px !important;
+  width: 140px !important;
+  height: 140px !important;
+  border-radius: 18px !important;
 }
 
 @media (max-width: 640px) {
+  .brand,
+  .navbar .brand,
+  .gl-nav .brand {
+    gap: 8px !important;
+    min-width: 156px !important;
+  }
+
   .logo-mark,
   .navbar .logo-mark,
   .gl-nav .logo-mark {
-    width: 72px !important;
-    height: 72px !important;
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 10px !important;
   }
 
-  .navbar .brand,
-  .gl-nav .brand {
-    min-width: 72px !important;
+  .gl-loader-mark {
+    width: 138px !important;
+    height: 138px !important;
+  }
+
+  .gl-loader-mark img {
+    width: 122px !important;
+    height: 122px !important;
   }
 }
