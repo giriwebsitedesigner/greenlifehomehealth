@@ -287,7 +287,7 @@
       text: "Skilled bedside nursing and medical routine support at home."
     },
     "Critical Care": {
-      img: assetUrl("photos/critical-care.png"),
+      img: assetUrl("photos/critical-care.png?v=2"),
       text: "Close monitoring and higher-dependency care support at home."
     },
     "Geriatric Care": {
