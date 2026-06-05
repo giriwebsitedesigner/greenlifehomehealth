@@ -186,6 +186,7 @@
     var items = [
       ["All Services", "services/"],
       ["Nursing Care at Home", "services/nursing-care/"],
+      ["Critical Care", "services/critical-care/"],
       ["Physiotherapy at Home", "services/physiotherapy/"],
       ["Post Operative Care", "services/post-operative-care/"],
       ["Geriatric Care", "services/elder-care/"],
@@ -284,6 +285,10 @@
     "Nursing Care at Home": {
       img: assetUrl("photos/nursing-care.jpg"),
       text: "Skilled bedside nursing and medical routine support at home."
+    },
+    "Critical Care": {
+      img: assetUrl("photos/critical-care.png"),
+      text: "Close monitoring and higher-dependency care support at home."
     },
     "Geriatric Care": {
       img: assetUrl("photos/elder-care.jpg"),
