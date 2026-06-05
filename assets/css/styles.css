@@ -12405,3 +12405,8 @@ body.page-home .gl-stats-strip .stat {
     line-height: 1.58 !important;
   }
 }
+
+/* Critical Care image: keep the visible Green Life logo in every card/page crop. */
+img[src*="critical-care.png"] {
+  object-position: left top !important;
+}
