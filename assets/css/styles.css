@@ -12303,3 +12303,105 @@ body.page-home .gl-stats-strip .stat {
   transform: translateX(-50%);
   background: #ffffff;
 }
+
+/* Final Services mobile/tablet guard: balanced images and no horizontal overflow. */
+.page-services,
+.page-services .gl-page,
+.page-services main {
+  overflow-x: hidden;
+}
+
+@media (max-width: 1024px) {
+  .page-services main > .gl-section.gl-soft > .gl-catalog {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .page-services .gl-service-detail,
+  .page-services .gl-service-detail.reveal,
+  .page-services .gl-service-detail.reveal.visible,
+  .page-services .gl-service-detail:nth-child(even),
+  .page-services .gl-service-detail.reveal:nth-child(even),
+  .page-services .gl-service-detail.reveal.visible:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    gap: clamp(16px, 4vw, 24px) !important;
+    padding: clamp(24px, 6vw, 42px) clamp(16px, 5vw, 36px) !important;
+    transform: none !important;
+  }
+
+  .page-services .gl-service-media,
+  .page-services .gl-service-detail:nth-child(even) .gl-service-media {
+    order: 0 !important;
+    width: min(100%, 620px) !important;
+    max-width: 620px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: clamp(210px, 52vw, 380px) !important;
+    aspect-ratio: 16 / 10 !important;
+    margin-inline: auto !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    background: #eef7f2 !important;
+  }
+
+  .page-services .gl-service-media img,
+  .page-services .gl-service-detail img {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    border-radius: inherit !important;
+  }
+
+  .page-services .gl-service-media img[src*="critical-care"] {
+    object-position: center 42% !important;
+  }
+
+  .page-services .gl-service-detail > div:last-child,
+  .page-services .gl-service-detail:nth-child(even) > div:last-child {
+    order: 1 !important;
+    width: min(100%, 620px) !important;
+    max-width: 620px !important;
+    min-width: 0 !important;
+    margin-inline: auto !important;
+    align-items: flex-start !important;
+  }
+
+  .page-services .gl-service-detail h2,
+  .page-services .gl-service-detail h3,
+  .page-services .gl-service-detail p,
+  .page-services .gl-service-detail .btn {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-services .gl-service-detail,
+  .page-services .gl-service-detail.reveal,
+  .page-services .gl-service-detail.reveal.visible,
+  .page-services .gl-service-detail:nth-child(even) {
+    padding: 22px 14px !important;
+  }
+
+  .page-services .gl-service-media,
+  .page-services .gl-service-detail:nth-child(even) .gl-service-media {
+    height: clamp(210px, 64vw, 310px) !important;
+    aspect-ratio: 4 / 3 !important;
+    border-radius: 12px !important;
+  }
+
+  .page-services .gl-service-detail h2 {
+    font-size: clamp(1.7rem, 9vw, 2.2rem) !important;
+  }
+
+  .page-services .gl-service-detail p {
+    font-size: 0.98rem !important;
+    line-height: 1.58 !important;
+  }
+}
